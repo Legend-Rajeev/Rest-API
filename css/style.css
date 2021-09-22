@@ -1,0 +1,145 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    outline: none;
+}
+.container{
+    width: 800px;
+    background: rgb(8, 143, 153);
+    padding: 30px 20px;
+    margin: 0 auto;
+}
+#header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+    border-bottom: 3px solid white;
+}
+#header .logo{
+    font-size: 2rem;
+color: aqua;
+font-weight: 804;
+border-bottom: 1px solid aqua;
+}
+#search{
+    padding: 5px 10px;
+}
+#insert-form{
+    width: 100%;
+    padding: 10px 5px;
+}
+#insert-form label{
+    color: rgb(161, 35, 35);
+}
+#insert-form input{
+    padding: 5px 10px;
+}
+#save-data{
+    padding: 7px 10px;
+    background: cyan;
+    color: black;
+    cursor: pointer;
+    border: none;
+    border-radius: 7px;
+}
+.btn{
+    background-color: rgb(161, 35, 35);
+    border: none;
+    border-radius: 7px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #fff;
+}
+table,tr,td,th{
+    border: 1px solid rgb(11, 11, 37);
+    border-spacing: 0;
+    text-align: center;
+    padding: 5px 10px;
+}
+table{
+    width: 650px;
+    padding: 0px;
+    margin: 30px auto;
+}
+th{
+    background: blue;
+}
+tr:nth-child(2n){
+    background: rgb(12, 177, 190);
+}
+
+#pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background: cyan; */
+}
+#pagination a{
+    background: cyan;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    margin: 0 2px;
+    clip-path: circle();
+}
+
+#modal{
+    background: #fee;
+height: 260px;
+width: 450px;
+position: fixed;
+top: 10%;
+left: calc(50% - 246px);
+box-shadow: 0 0 30px 5px;
+border-radius: 5px;
+z-index: 9999 ;
+display: none;
+}
+#modal h2{
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 10px auto;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 2px solid gray;
+}
+
+#update-form {
+    margin: 0 auto;
+}
+#update-form .input-field{
+    width: 100%;
+    display: block;
+    margin: 15px 0px;
+    text-align: center;
+}
+.btn-group{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-group button{
+    margin-right: 10px;
+}
+#update-data{
+    display: block;
+}
+.message{
+    /* background: #8fff73; */
+    width: 75%;
+    padding: 12px 15px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-bottom: -20px;
+    display: none;
+}
+#error-message{
+    background: rgb(255, 146, 113);
+}
+#success-message{
+    background: rgb(160, 255, 116);
+}

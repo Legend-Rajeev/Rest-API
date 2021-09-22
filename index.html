@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax Crud Application with pagination</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div id="header">
+            <div class="logo">RajivTech</div>
+            <input type="text" id="search" placeholder="Search here">
+        </div>
+
+        <form action="" id="insert-form">
+            <label for="">First Name : </label>
+            <input type="text" id="fname">
+            <label for="">Last Name : </label>
+            <input type="text" id="lname">
+
+            <button type="submit" class="btn " id="save-data">Submit</button>
+        </form>
+
+        <div id="success-message" class="message"></div>
+        <div id="error-message" class="message"></div>
+
+        <!-- ============ Modal =========== -->
+        <div id="modal">
+            <h2>Update your data </h2>
+            <form action="" id="update-form">
+                <div class="input-field">
+                    <label for="">First Name : </label>
+                    <input type="text" id="ufname">
+                </div>
+                <div class="input-field">
+                    <label for="">Last Name : </label>
+                    <input type="text" id="ulname">
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn " id="close-btn">Close</button>
+                    <button type="submit" class="btn " id="update-data">Submit</button>
+                </div>
+            </form>
+
+        </div>
+
+        <div id="table_data">
+            <table id="table">
+                <tr>
+                    <th>Student Id</th>
+                    <th>Student Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th colspan="2">Action</th>
+                </tr>
+
+                <tr>
+                    <td>1</td>
+                    <td>Rajeev Kumar</td>
+                    <td>Age</td>
+                    <td>Gender</td>
+                    <td><button class="btn editbtn" id="edit">Edit</button></td>
+                    <td><button class="btn deletebtn" id="delete">Delete</button></td>
+                </tr>
+
+            </table>
+
+            <div id="pagination">
+                <a id="1" href="">1</a>
+                <a id="2" href="">2</a>
+                <a id="3" href="">3</a>
+                <a id="4" href="">4</a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+
+            console.log('jQuery connection Successfully!');
+
+            // loadtable function
+            function loadtable() {
+
+                $.ajax({
+                    url: "http://localhost/advance%20php%20practice/Rest%20API/api-fetch-all.php",
+                    type: "GET",
+                    success: function (data) {
+                        // console.log(data);
+                       
+                        $.each(data, function(key, value){
+                            $('#table').append('<tr>' +
+                            '<td>'+value.id+'</td > '+
+                            '<td>'+value.name+'</td > '+
+                            '<td>'+value.age+'</td > '+
+                            '<td>'+value.gender+'</td > '+
+                            '<td><button class="btn editbtn" id="edit"  data-id="'+value.id+'" >Edit</button></td > '+
+                            '<td><button class="btn deletebtn" data-id="'+value.id+'" id="delete">Delete</button></td > '+
+
+                        '</tr>');
+
+                        })
+                    }
+
+                   
+                })
+            }
+
+            loadtable();
+
+            // Open Modal
+            $(document).on('click', '.editbtn', function () {
+                $('#modal').show();
+            })
+            // Close Modal
+            $('#close-btn').on('click', function () {
+                $('#modal').hide();
+            })
+
+
+
+        })
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
