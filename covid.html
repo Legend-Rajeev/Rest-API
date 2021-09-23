@@ -46,14 +46,19 @@
             background: rgb(97, 9, 9);
             color: white;
         }
+        .nav{
+            background: rgb(122, 30, 14);
+            color: rgb(148, 140, 32);
+        }
     </style>
 </head>
 
 <body>
 
     <div class="container">
+        <h1 class="nav">CoronaVirus Update</h1>
         <div id="first">
-            <h1>Global Data</h1>
+            <h1>World in CoronaVirus</h1>
             <table id="global">
                
             </table>
@@ -97,14 +102,10 @@
                         $('#global').append('<tr><td>'+key+'</td><td>'+value+'</td></tr>');
                     })
 
-                    console.log(data.Countries);
-                    // for (let i = 0; i < data.Countries.length; i++) {
-                        
                         $.each(data.Countries , function(key, value){
                             $('#country').append('<tr><td>'+key+'</td><td>'+value.Country+'</td><td>'+value.CountryCode+'</td><td>'+value.NewConfirmed+'</td><td>'+value.Date+'</td></tr>');
                         })
-                    // }
-                    
+
                 }
             })
 
