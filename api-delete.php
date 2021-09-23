@@ -1,7 +1,7 @@
 <?php
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-method: PATCH');
+header('Access-Control-Allow-method: POST');
 header('Access-Control-Allow-Origin: *');
 
 include('config.php');
@@ -13,7 +13,7 @@ $sql = "DELETE FROM `details` WHERE id = {$sid}";
 $result = mysqli_query($conn, $sql) or die('Query Field!');
 
 if($result){
-    echo json_encode(array('message'=>'Data Delete Successfully !', 'status'=>true));
+    echo json_encode(array('message'=>'<p style="color:red">Data Delete Successfully !</p>', 'status'=>true));
 }else{
     echo json_encode(array('message'=>'Your data not deleted!', 'status'=>false));
 }

@@ -19,10 +19,12 @@
         </div>
 
         <form action="" id="insert-form">
-            <label for="">First Name : </label>
-            <input type="text" id="fname">
-            <label for="">Last Name : </label>
-            <input type="text" id="lname">
+            <label for="">Name : </label>
+            <input type="text" id="name" name="sname"><br><br>
+            <label for="">Age : </label>
+            <input type="text" id="age" name="sage"><br><br>
+            <label for="">Gender : </label>
+            <input type="text" id="gender" name="sgender">
 
             <button type="submit" class="btn " id="save-data">Submit</button>
         </form>
@@ -35,13 +37,22 @@
             <h2>Update your data </h2>
             <form action="" id="update-form">
                 <div class="input-field">
-                    <label for="">First Name : </label>
-                    <input type="text" id="ufname">
+                    <!-- <label for="">id : </label> -->
+                    <input type="text" id="uid" name="sid" hidden>
                 </div>
                 <div class="input-field">
-                    <label for="">Last Name : </label>
-                    <input type="text" id="ulname">
+                    <label for="">Name : </label>
+                    <input type="text" id="uname" name="sname">
                 </div>
+                <div class="input-field">
+                    <label for="">Age : </label>
+                    <input type="text" id="uage" name="sage">
+                </div>
+                <div class="input-field">
+                    <label for="">Gender : </label>
+                    <input type="text" id="ugender" name="sgender">
+                </div>
+
 
                 <div class="btn-group">
                     <button type="button" class="btn " id="close-btn">Close</button>
@@ -61,14 +72,6 @@
                     <th colspan="2">Action</th>
                 </tr>
 
-                <tr>
-                    <td>1</td>
-                    <td>Rajeev Kumar</td>
-                    <td>Age</td>
-                    <td>Gender</td>
-                    <td><button class="btn editbtn" id="edit">Edit</button></td>
-                    <td><button class="btn deletebtn" id="delete">Delete</button></td>
-                </tr>
 
             </table>
 
@@ -91,7 +94,38 @@
 
         $(document).ready(function () {
 
-            console.log('jQuery connection Successfully!');
+            var sno = 1;
+
+            // Functions 
+            function conJson(jsonform) {
+                var arr = $(jsonform).serializeArray();
+                // console.log(arr);
+                var Obj = {};
+                for (let a = 0; a < arr.length; a++) {
+                    if (arr[a].value == "") {
+                        return false;
+                    } else {
+                        Obj[arr[a].name] = arr[a].value;
+                    }
+                }
+                var josnObj = JSON.stringify(Obj);
+                // console.log(josnObj);
+                return josnObj;
+            }
+
+            // message function
+            function showMessage(message, status) {
+                if (status == true) {
+                    $('#error-message').slideUp();
+                    $('#success-message').html(message).slideDown();
+                    setTimeout(() => {
+                        $('#success-message').html(message).slideUp();
+
+                    }, 3000);
+                } else if (status == false) {
+                    alert('Please Input all fileds!');
+                }
+            }
 
             // loadtable function
             function loadtable() {
@@ -101,42 +135,169 @@
                     type: "GET",
                     success: function (data) {
                         // console.log(data);
-                       
-                        $.each(data, function(key, value){
+                        $('#table').html('');
+                        $.each(data, function (key, value) {
                             $('#table').append('<tr>' +
-                            '<td>'+value.id+'</td > '+
-                            '<td>'+value.name+'</td > '+
-                            '<td>'+value.age+'</td > '+
-                            '<td>'+value.gender+'</td > '+
-                            '<td><button class="btn editbtn" id="edit"  data-id="'+value.id+'" >Edit</button></td > '+
-                            '<td><button class="btn deletebtn" data-id="'+value.id+'" id="delete">Delete</button></td > '+
+                                '<td>' + sno + '</td > ' +
+                                '<td>' + value.name + '</td > ' +
+                                '<td>' + value.age + '</td > ' +
+                                '<td>' + value.gender + '</td > ' +
+                                '<td><button class="btn editbtn" id="edit"  data-eid="' + value.id + '" >Edit</button></td > ' +
+                                '<td><button class="btn deletebtn" data-deleteid="' + value.id + '" id="delete">Delete</button></td > ' +
 
-                        '</tr>');
+                                '</tr>');
+                                sno++;
 
                         })
                     }
 
-                   
+
                 })
             }
 
-            loadtable();
+            loadtable()
+
+            // Insert DATA From REST API
+            $('#save-data').on('click', function (e) {
+                e.preventDefault();
+
+                var sendjson = conJson('#insert-form');
+                // console.log(sendjson);
+
+                $.ajax({
+                    url: 'http://localhost/advance%20php%20practice/Rest%20API/api-insert.php',
+                    type: 'POST',
+                    data: sendjson,
+                    success: function (data) {
+                        console.log(data);
+                        if (data.status == true) {
+                            $('#insert-form').trigger('reset');
+                            loadtable()
+                            showMessage(data.message, data.status);
+
+                        } else if (data.status == false) {
+                            console.log(data);
+                            showMessage(data.message, data.status)
+
+                        }
+                    }
+                })
+
+            })
+
 
             // Open Modal
             $(document).on('click', '.editbtn', function () {
-                $('#modal').show();
-            })
+                $('#modal').slideDown();
+
+                // Fetch single record for update data
+                var eid = $(this).data('eid');
+                // console.log(eid);
+                var obj = { "sid": eid };
+                var sid = JSON.stringify(obj);
+                // console.log(sid);
+
+                $.ajax({
+                    url: 'http://localhost/advance%20php%20practice/Rest%20API/api-fetch-single.php',
+                    type: 'POST',
+                    data: sid,
+                    success: function (data) {
+                        // console.log(data);
+                        $('#uid').val(data[0].id)
+                        $('#uname').val(data[0].name)
+                        $('#uage').val(data[0].age)
+                        $('#ugender').val(data[0].gender)
+                    }
+                })
+
+                // Update Record with REST API
+                $('#update-data').on('click', function (e) {
+                    e.preventDefault();
+
+                    var update_json = conJson('#update-form');
+                    // console.log(update_json);
+
+                    $.ajax({
+                        url: 'http://localhost/advance%20php%20practice/Rest%20API/api-update.php',
+                        type: 'POST',
+                        data: update_json,
+                        success: function (data) {
+                            // console.log(data);
+                            if (data.status == true) {
+                                loadtable()
+                                $('#modal').hide();
+                                showMessage(data.message, data.status);
+                            }else if(data.status == false){
+                                showMessage(data.message, data.status);
+                            }
+                        }
+                    })
+
+
+                })
+
+
+
+
+            }) // end modal
             // Close Modal
             $('#close-btn').on('click', function () {
                 $('#modal').hide();
             })
 
 
+            // Delete Data 
+            $(document).on('click', '.deletebtn', function () {
+                if (confirm('can you delete this data ?')) {
+                    var delte_id = $(this).data("deleteid");
+                    var del_obj = { sid: delte_id };
+                    var del_json = JSON.stringify(del_obj);
+                    // console.log(delte_id)
+                    $.ajax({
+                        url: 'http://localhost/advance%20php%20practice/Rest%20API/api-delete.php',
+                        type: 'POST',
+                        data: del_json,
+                        success: function (data) {
+                            loadtable()
+                            showMessage(data.message, data.status);
+                        }
+                    })
+                }
+            })
+
+
+            // Search Data Function
+            $('#search').on('keyup', function(e){
+                var search_term = $(this).val();
+                // console.log(search_term);
+
+                $.ajax({
+                    url: 'http://localhost/advance%20php%20practice/Rest%20API/api-search.php?name=' + search_term,
+                    type: 'GET',
+                    success: function(data){
+                        $('#table').html('');
+                        $.each(data, function (key, value) {
+                            $('#table').append('<tr>' +
+                                '<td>' + sno + '</td > ' +
+                                '<td>' + value.name + '</td > ' +
+                                '<td>' + value.age + '</td > ' +
+                                '<td>' + value.gender + '</td > ' +
+                                '<td><button class="btn editbtn" id="edit"  data-eid="' + value.id + '" >Edit</button></td > ' +
+                                '<td><button class="btn deletebtn" data-deleteid="' + value.id + '" id="delete">Delete</button></td > ' +
+
+                                '</tr>');
+                                sno++;
+
+                        })
+                    }
+                })
+            })
+
+
+
+
 
         })
-
-
-
 
 
 
